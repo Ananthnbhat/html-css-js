@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Passport.js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+</head>
+
+<body>
+    <nav id="navbar" class="left-div">
+        <header id="name">Passport</header>
+        <img class="icon" src="https://image.flaticon.com/icons/png/128/259/259995.png" alt="passport example icon">
+        <hr size="5" style="background-color: #312509;width:96%">
+        <a class="nav-link" id="firstlink" href="#Introduction">Introduction</a>
+        <a class="nav-link" href="#Facebook">Facebook</a>
+        <a class="nav-link" href="#Twitter">Twitter</a>
+        <a class="nav-link" href="#Google">Google</a>
+        <a class="nav-link" id="lastlink" href="#Login_and_Logout">Login and Logout</a>
+    </nav>
+    <div id="right-div">
+        <main id="main-doc">
+            <section class="main-section" id="Introduction">
+                <header>Introduction</header>
+                <article>
+                    <p>Passport is authentication middleware for Node.js. Extremely flexible and modular, Passport can be unobtrusively
+                        dropped in to any Express-based web application. A comprehensive set of strategies support authentication
+                        using a username and password, Facebook, Twitter, and more.</p>
+                    <p>It is designed to serve a singular purpose: authenticate requests. When writing modules, encapsulation
+                        is a virtue, so Passport delegates all other functionality to the application. This separation of
+                        concerns keeps code clean and maintainable, and makes Passport extremely easy to integrate into an
+                        application.
+                    </p>
+                    <p>In modern web applications, authentication can take a variety of forms. Traditionally, users log in by
+                        providing a username and password. With the rise of social networking, single sign-on using an OAuth
+                        provider such as Facebook or Twitter has become a popular authentication method. Services that expose
+                        an API often require token-based credentials to protect access.</p>
+                    <p>Passport recognizes that each application has unique authentication requirements. Authentication mechanisms,
+                        known as strategies, are packaged as individual modules. Applications can choose which strategies
+                        to employ, without creating unnecessary dependencies.</p>
+                    <p>Despite the complexities involved in authentication, code does not have to be complicated.</p>
+                    <code>app.post('/login', passport.authenticate('local', { successRedirect: '/',
+                        failureRedirect: '/login' }));</code>
+                </article>
+            </section>
+            <section class="main-section" id="Facebook">
+                <header>Facebook</header>
+                <article>
+                    <p>The Facebook strategy allows users to log in to a web application using their Facebook account. Internally,
+                        Facebook authentication works using OAuth 2.0.</p>
+                    <li>Support for Facebook is implemented by the passport-facebook module.</li>
+                    <h2>Install</h2>
+                    <code>$ npm install passport-facebook</code>
+                    <h2>Configuration</h2>
+                    <p>In order to use Facebook authentication, you must first create an app at Facebook Developers. When created,
+                        an app is assigned an App ID and App Secret. Your application must also implement a redirect URL,
+                        to which Facebook will redirect users after they have approved access for your application.</p>
+                    <code>var passport = require('passport')
+                            , FacebookStrategy = require('passport-facebook').Strategy;
+                          
+                          passport.use(new FacebookStrategy({
+                              clientID: FACEBOOK_APP_ID,
+                              clientSecret: FACEBOOK_APP_SECRET,
+                              callbackURL: "http://www.example.com/auth/facebook/callback"
+                            },
+                            function(accessToken, refreshToken, profile, done) {
+                              User.findOrCreate(..., function(err, user) {
+                                if (err) { return done(err); }
+                                done(null, user);
+                              });
+                            }
+                          ));</code>
+                    <p>The verify callback for Facebook authentication accepts accessToken, refreshToken, and profile arguments.
+                        profile will contain user profile information provided by Facebook; refer to User Profile for additional
+                        information.
+                    </p>
+                    <li>Note: For security reasons, the redirection URL must reside on the same host that is registered with
+                        Facebook.
+                    </li>
+                    <h2>Routes</h2>
+                    <p>Two routes are required for Facebook authentication. The first route redirects the user to Facebook.
+                        The second route is the URL to which Facebook will redirect the user after they have logged in.</p>
+                    <code>// Redirect the user to Facebook for authentication.  When complete,
+                            // Facebook will redirect the user back to the application at
+                            //     /auth/facebook/callback
+                            app.get('/auth/facebook', passport.authenticate('facebook'));
+                            
+                            // Facebook will redirect the user to this URL after approval.  Finish the
+                            // authentication process by attempting to obtain an access token.  If
+                            // access was granted, the user will be logged in.  Otherwise,
+                            // authentication has failed.
+                            app.get('/auth/facebook/callback',
+                              passport.authenticate('facebook', { successRedirect: '/',
+                                                                  failureRedirect: '/login' }));</code>
+                    <li>Note that the URL of the callback route matches that of the callbackURL option specified when configuring
+                        the strategy.</li>
+                </article>
+            </section>
+            <section class="main-section" id="Twitter">
+                <header>Twitter</header>
+                <article>
+                    <p>The Twitter strategy allows users to sign in to a web application using their Twitter account. Internally,
+                        Twitter authentication works using OAuth 1.0a.</p>
+                    <li>Support for Twitter is implemented by the passport-twitter module.</li>
+                    <h2>Install</h2>
+                    <code>$ npm install passport-twitter</code>
+                    <h2>Configuration</h2>
+                    <p>In order to use Twitter authentication, you must first create an application at Twitter Developers. When
+                        created, an application is assigned a consumer key and consumer secret. Your application must also
+                        implement a callback URL, to which Twitter will redirect users after they have approved access for
+                        your application.</p>
+                    <code>var passport = require('passport')
+                            , TwitterStrategy = require('passport-twitter').Strategy;
+                          
+                          passport.use(new TwitterStrategy({
+                              consumerKey: TWITTER_CONSUMER_KEY,
+                              consumerSecret: TWITTER_CONSUMER_SECRET,
+                              callbackURL: "http://www.example.com/auth/twitter/callback"
+                            },
+                            function(token, tokenSecret, profile, done) {
+                              User.findOrCreate(..., function(err, user) {
+                                if (err) { return done(err); }
+                                done(null, user);
+                              });
+                            }
+                          ));</code>
+                    <p>The verify callback for Twitter authentication accepts token, tokenSecret, and profile arguments. profile
+                        will contain user profile information provided by Twitter; refer to User Profile for additional information.</p>
+
+                </article>
+            </section>
+            <section class="main-section" id="Google">
+                <header>Google</header>
+                <article>
+                    <p>The Google strategy allows users to sign in to a web application using their Google account. Google used
+                        to support OpenID internally, but it now works based on OpenID Connect and supports oAuth 1.0 and
+                        oAuth 2.0.</p>
+                    <li>Support for Google is implemented by the passport-google-oauth module.</li>
+                    <h2>Install</h2>
+                    <code>$ npm install passport-google-oauth</code>
+                    <h2>Configuration</h2>
+                    <p>The Client Id and Client Secret needed to authenticate with Google can be set up from the Google Developers
+                        Console. You may also need to enable Google+ API in the developer console, otherwise user profile
+                        data may not be fetched. Google supports authentication with both oAuth 1.0 and oAuth 2.0.</p>
+                    <h3>oAuth 1.0</h3>
+                    <p>The Google OAuth 1.0 authentication strategy authenticates users using a Google account and OAuth tokens.
+                        The strategy requires a verify callback, which accepts these credentials and calls done providing
+                        a user, as well as options specifying a consumer key, consumer secret, and callback URL.</p>
+                    <h3>Configuration</h3>
+                    <code>var passport = require('passport');
+                            var GoogleStrategy = require('passport-google-oauth').OAuthStrategy;
+                            
+                            // Use the GoogleStrategy within Passport.
+                            //   Strategies in passport require a `verify` function, which accept
+                            //   credentials (in this case, a token, tokenSecret, and Google profile), and
+                            //   invoke a callback with a user object.
+                            passport.use(new GoogleStrategy({
+                                consumerKey: GOOGLE_CONSUMER_KEY,
+                                consumerSecret: GOOGLE_CONSUMER_SECRET,
+                                callbackURL: "http://www.example.com/auth/google/callback"
+                              },
+                              function(token, tokenSecret, profile, done) {
+                                  User.findOrCreate({ googleId: profile.id }, function (err, user) {
+                                    return done(err, user);
+                                  });
+                              }
+                            ));</code>
+
+                </article>
+            </section>
+            <section class="main-section" id="Login_and_Logout">
+                <header>Login and Logout</header>
+                <article>
+                    <h2>Login</h2>
+                    <p>Passport exposes a login() function on req (also aliased as logIn()) that can be used to establish a
+                        login session.</p>
+                    <code>req.login(user, function(err) {
+                            if (err) { return next(err); }
+                            return res.redirect('/users/' + req.user.username);
+                          });</code>
+                    <p>When the login operation completes, user will be assigned to req.user.</p>
+                    <li>Note: passport.authenticate() middleware invokes req.login() automatically. This function is primarily
+                        used when users sign up, during which req.login() can be invoked to automatically log in the newly
+                        registered user.</li>
+                    <h2>Logout</h2>
+                    <p>Passport exposes a logout() function on req (also aliased as logOut()) that can be called from any route
+                        handler which needs to terminate a login session. Invoking logout() will remove the req.user property
+                        and clear the login session (if any).</p>
+                    <code>app.get('/logout', function(req, res){
+                            req.logout();
+                            res.redirect('/');
+                          });</code>
+
+
+                </article>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+body{
+    
+    /* margin: 0; */
+    background: #3f1e47;
+    margin: 0;
+
+}
+.parent {
+    display: flex;
+  }
+  
+  .child {
+    width: 100px;  /* Or whatever */
+    height: 100px; /* Or whatever */
+    margin: auto;  /* Magic! */
+    background-color: #fff;
+    border:2px solid yellow;
+  }
+#i1{
+
+ order:1;
+
+}
+#i2{
+   
+    order:2;
+
+}
+#i3{
+  
+    order:3;
+
+}
+#i4{
+  
+    order:4;
+   
+}
