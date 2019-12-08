@@ -3,7 +3,6 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    background-color: #24252A;
 }
 
 li, a, button {
@@ -16,9 +15,10 @@ li, a, button {
 
 header {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     padding: 30px 10%;
+    background-color: #24252A;
 }
 
 .logo {
@@ -56,4 +56,19 @@ button {
 
 button:hover {
     background-color: rgba(0, 136, 169, 0.8);
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    min-height:90px;
+    background-color: #24252A;
+    color: white;
+    text-align: center;
+}
+p{
+    margin:30px;
+    font-size:24px;
 }
